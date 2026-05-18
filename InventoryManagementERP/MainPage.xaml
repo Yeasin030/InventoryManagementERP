@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryManagementERP.MainPage" BackgroundColor="White">
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Border BackgroundColor="Navy" CornerRadius="10" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Inventory Management" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+
+                    <!-- Stats Grid -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,10,0,0">
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="Total Products" FontSize="12" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="TotalProductsLabel" Text="0" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="Total Value" FontSize="12" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="TotalValueLabel" Text="$0.00" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Label Text="Low Stock" FontSize="12" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="LowStockLabel" Text="0" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Search and Filter -->
+            <Border CornerRadius="10" Padding="15" HasShadow="True" BackgroundColor="White">
+                <VerticalStackLayout Spacing="10">
+                    <SearchBar x:Name="SearchBar" TextColor="Black"
+                               Placeholder="Search products..." 
+                               TextChanged="OnSearchTextChanged"
+                               BackgroundColor="#F0F0F0"/>
+
+                    <Picker x:Name="FilterPicker" 
+                            Title="Filter by" TextColor="Black"
+                            BackgroundColor="#F0F0F0"
+                            SelectedIndexChanged="OnFilterChanged">
+                        <Picker.Items>
+                            <x:String>All Products</x:String>
+                            <x:String>Shirt</x:String>
+                            <x:String>Pant</x:String>
+                            <x:String>T-Shirt</x:String>
+                            <x:String>Bage</x:String>
+                            <x:String>Low Stock</x:String>
+                            <x:String>Out of Stock</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Add Product Button -->
+            <Button Text="+ Add New Product" 
+                    BackgroundColor="#4CAF50" 
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Clicked="OnAddProductClicked"/>
+
+            <!-- Products List -->
+            <Label Text="Products" FontSize="20" FontAttributes="Bold" TextColor="#333"/>
+
+            <CollectionView x:Name="ProductsCollectionView" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,5" 
+                               Padding="15" 
+                               BackgroundColor="White" 
+                               CornerRadius="10" 
+                               HasShadow="True">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnProductTapped" CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                                    <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#333"/>
+                                    <Label Text="{Binding SKU}" FontSize="12" TextColor="#666"/>
+                                    <Label Text="{Binding Category}" FontSize="12" TextColor="#2196F3"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="1" HorizontalOptions="End" Spacing="5">
+                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}" FontSize="18" FontAttributes="Bold" TextColor="#4CAF50"/>
+                                    <Label Text="{Binding TotalValue}" FontSize="12" TextColor="#666"/>
+                                </VerticalStackLayout>
+
+                                <Grid Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,10,0,0">
+                                    <Label Grid.Column="0" Text="{Binding StockStatus}" FontSize="12" FontAttributes="Bold" TextColor="{Binding StatusColor}"/>
+                                    <Label Grid.Column="1" Text="{Binding Quantity, StringFormat='Qty: {0}'}" FontSize="12" TextColor="#666" HorizontalOptions="End"/>
+                                </Grid>
+
+                                <Label Grid.Row="2" Grid.ColumnSpan="2" 
+                                       Text="{Binding LastUpdated, StringFormat='Updated: {0:MMM dd, yyyy HH:mm}'}" 
+                                       FontSize="10" 
+                                       TextColor="#999" 
+                                       Margin="0,5,0,0"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+
+</ContentPage>
